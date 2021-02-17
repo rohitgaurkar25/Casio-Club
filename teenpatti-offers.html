@@ -1,0 +1,370 @@
+
+
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript">
+	var fbAppId = "1439012419665260";
+	function fbAsyncInit() {
+		FB.init({
+			appId      : fbAppId,
+			status     : true, // check login status
+			cookie     : true, // enable cookies to allow the server to access the session
+			xfbml      : true,  // parse XFBML
+			autoLogAppEvents : true,
+	    	version          : 'v2.9'   
+		});
+	}
+
+	function fb_userlogout() {
+			window.location = "http://www.superstarteenpatti.com/account?logout=true";
+    }
+
+	function fb_logout() {
+        FB.logout(function(response) {
+			//console.log("user is now logged out");
+			window.location = "http://www.superstarteenpatti.com/account?logout=true";
+		});
+    }
+
+    function check_session(type)
+    {
+    	//alert(type);
+    	var str="chksession=true";
+        jQuery.ajax({
+                type: "POST",
+                url: "check_session.php",
+                data: str,
+                cache: false,
+                success: function(res){
+                	console.log(res);
+                    if(res == "1") 
+                    {
+                    	if(type=="buy_chips")
+                    	{
+                    		$('#myModal').modal('show');
+                    	}
+                    	else if(type=="offers")
+                    	{
+                    		$('#myModal1').modal('show');
+                    	}
+                    //alert('Your session is not set!');
+                    }
+                    else
+                    {
+                    	var tocken="";
+
+                    	if(type=="buy_chips")
+                    	{
+                    		if(tocken == "")
+							{
+								check_tpid();
+							}
+							else
+							{
+	                    		buy_chips_fb_check();
+							}
+                    	}
+                    	else if(type=="offers")
+                    	{
+                    		if(tocken == "")
+							{
+								check_tpid_offer();
+							}
+							else
+							{
+	                    		buy_chips_fb_check_offers();
+							}
+                    	}
+
+                    }
+                }
+        });
+    }
+
+    function buy_chips_fb_check(){
+    	FB.getLoginStatus(function(response) {
+    		//console.log(response);
+		  if (response.status === 'connected') {
+		  	// User is logged in to facebook
+		    //var uid = response.authResponse.userID;
+		    //var accessToken = response.authResponse.accessToken;
+		    fb_log_in_success(response);
+		  } else if (response.status === 'not_authorized') {
+		  	//console.log("the user is logged in to Facebook, but has not authenticated your app");
+		  } else {
+		    // the user isn't logged in to Facebook.
+		    FB.login(function(response) {
+		    	//console.log(response.authResponse);
+			    if (response.authResponse) {
+			    	fb_log_in_success(response);
+			    	/*FB.api('/me', function(response) {
+			      		console.log('Good to see you, ' + response.name + '.');
+			     	});*/
+			    	//console.log('Welcome!  Fetching your information.... ');
+			     	//console.log(response);
+			     	//window.location = "http://www.superstarteenpatti.com/account";
+			    } else {
+			    	//console.log('User cancelled login or did not fully authorize.');
+			    }
+			});
+		  }
+		});
+    }
+    
+    function buy_chips_fb_check_offers(){
+    	FB.getLoginStatus(function(response) {
+    		//console.log(response);
+		  if (response.status === 'connected') {
+		  	// User is logged in to facebook
+		    //var uid = response.authResponse.userID;
+		    //var accessToken = response.authResponse.accessToken;
+		    fb_log_in_success_offers(response);
+		  } else if (response.status === 'not_authorized') {
+		  	//console.log("the user is logged in to Facebook, but has not authenticated your app");
+		  } else {
+		    // the user isn't logged in to Facebook.
+		    FB.login(function(response) {
+		    	//console.log(response.authResponse);
+			    if (response.authResponse) {
+			    	fb_log_in_success_offers(response);
+			    	/*FB.api('/me', function(response) {
+			      		console.log('Good to see you, ' + response.name + '.');
+			     	});*/
+			    	//console.log('Welcome!  Fetching your information.... ');
+			     	//console.log(response);
+			     	//window.location = "http://www.superstarteenpatti.com/account";
+			    } else {
+			    	//console.log('User cancelled login or did not fully authorize.');
+			    }
+			});
+		  }
+		});
+    }
+
+    
+    function fb_login_check(){
+    	FB.getLoginStatus(function(response) {
+    		//console.log(response);
+		  if (response.status === 'connected') {
+		  	// User is logged in to facebook
+		    //var uid = response.authResponse.userID;
+		    //var accessToken = response.authResponse.accessToken;
+		    fb_login_check_success_offers(response);
+		  } else if (response.status === 'not_authorized') {
+		  	//console.log("the user is logged in to Facebook, but has not authenticated your app");
+		  } else {
+		    // the user isn't logged in to Facebook.
+		    FB.login(function(response) {
+		    	//console.log(response.authResponse);
+			    if (response.authResponse) {
+			    	fb_login_check_success_offers(response);
+			    	/*FB.api('/me', function(response) {
+			      		console.log('Good to see you, ' + response.name + '.');
+			     	});*/
+			    	//console.log('Welcome!  Fetching your information.... ');
+			     	//console.log(response);
+			     	//window.location = "http://www.superstarteenpatti.com/account";
+			    } else {
+			    	//console.log('User cancelled login or did not fully authorize.');
+			    }
+			});
+		  }
+		});
+    }
+
+
+    function fb_log_in_success(response)
+    {
+    	$.ajax({
+		  url: 'save_fb_data.php',
+		  type: 'POST',
+		  data: response,
+		  success: function(data) {
+		  	var t="login";
+			window.location = "http://www.superstarteenpatti.com/account";
+		  },
+		  error: function(e) {
+			//called when there is an error
+			//console.log(e.message);
+		  }
+		});
+    }
+
+    function check_tpid()
+    {
+    	var tpid=$('#tpid').val();
+    	if(tpid=="")
+    	{
+    		var tpid="";
+    	}
+    	//alert(tpid);
+    	var r=/^[a-zA-Z0-9]*$/;
+        var rnoResult = r.test(tpid);
+
+        if(tpid == '' || rnoResult == false)
+        {
+           alert("only numeric and Alphabet are valid !!");
+        }
+        else
+        {
+        	  	$.ajax({
+					  url: 'tpid_call.php',
+					  type: 'POST',
+					  data: {tpid:tpid},
+					  success: function(data) {
+					  	data = JSON.parse(data);
+					  	console.log(data);
+            			console.log(data.login);
+            			if(data.login == true)
+            			{
+            				$.ajax({
+								  url: 'set_data.php',
+								  type: 'GET',
+								  data: {'tpid':tpid,'UserId':data.UserId,'paytm_email':data.paytm_email,'paytm_mobile':data.paytm_mobile,'TESTERS':data.TESTERS,'pp':data.pp,'chips':data.Chips,'coins':data.Coins},
+								  success: function() {
+			            		//	 window.location = 'http://svn.gamewithpals.com/superstarteenpatti/account?flag=tpid';
+			            			 window.location = 'http://www.superstarteenpatti.com/account';
+								  }
+								});
+            			}
+            			else
+            			{
+            				alert("Please Enter Proper Tp ID");
+            			}
+					  },
+					  error: function(e) {
+						//called when there is an error
+						//console.log(e.message);
+					  }
+					});
+        }
+  
+    }
+
+    function fb_log_in_success_offers(response){
+    	$.ajax({
+		  url: 'save_fb_data.php',
+		  type: 'POST',
+		  data: response,
+		  success: function(data) {
+		  	var t="login";
+			window.location = "http://www.superstarteenpatti.com/teenpatti-offers";
+		  },
+		  error: function(e) {
+			//called when there is an error
+			//console.log(e.message);
+		  }
+		});
+    }
+
+    function check_tpid_offer()
+    {
+    	var tpid1=$('#tpid1').val();
+    	if(tpid1=="")
+    	{
+    		var tpid1="";
+    	}
+
+    	var r=/^[a-zA-Z0-9]*$/;
+        var tp = r.test(tpid1);
+
+        if(tpid1 == '' || tp == false)
+        {
+           alert("only numeric and Alphabet are valid !!");
+        }
+        else
+        {
+        	  	$.ajax({
+					  url: 'tpid_call.php',
+					  type: 'POST',
+					  data: {tpid:tpid1},
+					  success: function(data) {
+					  	data = JSON.parse(data);
+					  	console.log(data);
+            			console.log(data.login);
+            			if(data.login == true)
+            			{
+            				$.ajax({
+								  url: 'set_data.php',
+								  type: 'GET',
+								  data: {'tpid':tpid1,'UserId':data.UserId,'paytm_email':data.paytm_email,'paytm_mobile':data.paytm_mobile,'TESTERS':data.TESTERS,'pp':data.pp,'chips':data.Chips,'coins':data.Coins},
+								  success: function() {
+			            			 window.location = 'http://www.superstarteenpatti.com/teenpatti-offers';
+								  }
+								});
+
+            			}
+            			else
+            			{
+            				alert("Please Enter Proper Tp ID");
+            			}
+					  },
+					  error: function(e) {
+						//called when there is an error
+						//console.log(e.message);
+					  }
+					});
+        }
+  
+    }
+
+    function fb_login_check_success_offers(response){
+    	$.ajax({
+		  url: 'save_fb_data.php',
+		  type: 'POST',
+		  data: response,
+		  success: function(data) {
+		  	var t="login";
+			window.location = "http://www.superstarteenpatti.com/teenpatti-offers";
+		  },
+		  error: function(e) {
+			//called when there is an error
+			//console.log(e.message);
+		  }
+		});
+    }
+
+    
+</script>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+            	<br><br>
+            	<center><label>Tp Id : </label>
+            	<input type="text" name="tpid" id="tpid" maxlength="12">
+            	&nbsp;&nbsp;
+            	<input type="button" class="btn btn-primary" value="Submit" onclick="check_tpid()">
+            	<center>
+            	<br><br>
+            	<center><font style="font-size: 20px">OR</font></center>
+            	<br><br>
+            	<img src="images/teenpatti-login-facebook__.png" height="6%" width="60%" style="cursor:pointer;" onclick="buy_chips_fb_check()"/>
+            	
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+            	<br><br>
+            	<center><label>Tp Id : </label>
+            	<input type="text" name="tpid1" id="tpid1" maxlength="12">
+            	&nbsp;&nbsp;
+            	<input type="button" class="btn btn-primary" value="Submit" onclick="check_tpid_offer()">
+            	<center>
+            	<br><br>
+            	<center><font style="font-size: 20px">OR</font></center>
+            	<br><br>
+            	<img src="images/teenpatti-login-facebook__.png" height="6%" width="60%" style="cursor:pointer;" onclick="buy_chips_fb_check_offers()"/>
+            	
+            </div>
+
+        </div>
+    </div>
+</div>
