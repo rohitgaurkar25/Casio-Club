@@ -9111,20 +9111,13 @@ video::-webkit-media-controls-fullscreen-button {
     display: table;
     position: relative;
     max-height: 600px;
-    height: 56.25%;
+    height: 600px;
     width: 100%;
     overflow: hidden;
     background-image: url('https://image.freepik.com/free-vector/black-gold-casino-playing-cards-background_1017-23672.jpg');
+      background-repeat: no-repeat;
 }
 
-.home_banner_video video,
-.home_banner_video iframe {
-    max-height: 600px;
-    height: 600px;
-    display: table-cell;
-    width: 100%;
-    
-}
 
 .color-overlay,
 .features_video {
