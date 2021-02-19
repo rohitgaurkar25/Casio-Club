@@ -9114,7 +9114,7 @@ video::-webkit-media-controls-fullscreen-button {
     height: 56.25%;
     width: 100%;
     overflow: hidden;
-    background: #000;
+    background-image: url('https://image.freepik.com/free-vector/black-gold-casino-playing-cards-background_1017-23672.jpg');
 }
 
 .home_banner_video video,
@@ -9123,6 +9123,7 @@ video::-webkit-media-controls-fullscreen-button {
     height: 600px;
     display: table-cell;
     width: 100%;
+    
 }
 
 .color-overlay,
