@@ -2495,6 +2495,7 @@ fieldset[disabled] .btn-primary.active {
     background-image:url(../images/hero.png);
     background-position: 0% 0%;
     background-repeat: no-repeat;
+    background-size: 50%;
         position: relative;
 
     overflow:hidden;}
