@@ -2493,12 +2493,13 @@ fieldset[disabled] .btn-primary.active {
 }
 .abc {height:600px;
     width:600px;
-    background-image:url(../images/hero.png);
+    background-image:url('http://gamentio.com/documents/1130902/0/MainBanner.png');
     background-position: 0% 0%;
     background-repeat: no-repeat;
         position: relative;
 
     overflow:hidden;}
+
 .btn-success {
     color: #fff;
     background-color: #5cb85c;
