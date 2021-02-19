@@ -2491,7 +2491,8 @@ fieldset[disabled] .btn-primary.active {
     color: #428bca;
     background-color: #fff
 }
-.abc {
+.abc {height:600px;
+    width:600px;
     background-image:url(../images/hero.png);
     background-position: 0% 0%;
     background-repeat: no-repeat;
